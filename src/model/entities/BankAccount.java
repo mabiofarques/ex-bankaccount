@@ -26,9 +26,16 @@ public class BankAccount {
         return numberAccount;
     }
 
-
     public double getBalance() {
         return balance;
+    }
+
+    public void deposit(double amount){
+        balance =  getBalance() + amount;
+    }
+
+    public void withdraw(double amount){
+        balance = getBalance() - amount;
     }
 
 }
