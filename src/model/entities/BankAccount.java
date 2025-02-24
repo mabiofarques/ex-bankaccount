@@ -1,5 +1,7 @@
 package model.entities;
 
+import model.exceptions.BusinessException;
+
 public class BankAccount {
     private String holder;
     private final String numberAccount;
@@ -43,13 +45,37 @@ public class BankAccount {
         return overdraftFacility;
     }
 
-    public void deposit(double amount){
-        balance =  getBalance() + amount;
+    public void deposit(double amount)throws BusinessException{
+        if(amount > 0) {
+            balance = getBalance() + amount;
+        }
+        else {
+            throw new BusinessException("Invalid deposit");
+        }
     }
 
-    public void withdraw(double amount){
-        balance = getBalance() - amount;
+    public void withdraw(double amount) throws BusinessException{
+        if(amount <= 0){
+            throw new BusinessException("Invalid withdraw");
+        }
+
+        double availableBalance = getBalance() + getOverdraftFacility();
+        if(amount <= availableBalance) {
+            if (amount > getBalance()) {
+                double overdraftUsed = amount - getBalance();
+                double overdraftFee = overdraftUsed * 0.2;
+                balance = - overdraftUsed - overdraftFee ;
+                System.out.println("You are in overdraft funds. Overdraft applied: " + overdraftFee);
+            }
+            else {
+                balance -= amount;
+            }
+        }
+        else {
+            throw new BusinessException("This amount is not available, even with overdraft facility.");
+        }
     }
+
 
     public void calculateOverdraftFacility(){
         if (!overdraftFacilityCalculated) {
