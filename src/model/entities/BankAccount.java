@@ -107,12 +107,12 @@ public class BankAccount {
     public String toString(){
         return "Holder: "
                 + getHolder()
-                + ", Number Account: "
+                + ", Account number: "
                 + getNumberAccount()
-                + ", Balance: $"
-                + getBalance()
-                + ", Overdraft Facility: $"
-                + getOverdraftFacility();
+                + ", Balance: $ "
+                + String.format("%.2f",getBalance())
+                + ", Overdraft Facility: $ "
+                + String.format("%.2f",getOverdraftFacility());
 
     }
 
