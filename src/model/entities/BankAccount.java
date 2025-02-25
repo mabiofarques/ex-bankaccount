@@ -2,6 +2,8 @@ package model.entities;
 
 import model.exceptions.BusinessException;
 
+import java.util.Scanner;
+
 public class BankAccount {
     private String holder;
     private final String numberAccount;
@@ -70,6 +72,26 @@ public class BankAccount {
 
     }
 
+    public void payBill(double amount) throws BusinessException{
+        if (amount <= 0){
+            throw new BusinessException("Error reading the bill value");
+        }
+        double availableBalance = getBalance() + getOverdraftFacility();
+        if (amount > availableBalance) {
+            throw new BusinessException("Insufficient funds to pay this bill");
+        }
+        if(amount > getBalance()){
+            double overdraftUsed = amount - getBalance();
+            double overdraftFee = overdraftUsed * 0.2;
+            balance = - overdraftUsed - overdraftFee;
+            System.out.println("Overdraft used to pay. Successful payment!");
+        }
+        else {
+            balance = getBalance() - amount;
+            System.out.println("Successful payment!");
+        }
+    }
+
     public void calculateOverdraftFacility(){
         if (!overdraftFacilityCalculated) {
             if (getBalance() <= 500.0) {
@@ -81,16 +103,15 @@ public class BankAccount {
         }
     }
 
-
     @Override
     public String toString(){
         return "Holder: "
                 + getHolder()
                 + ", Number Account: "
                 + getNumberAccount()
-                + ", Balance: "
+                + ", Balance: $"
                 + getBalance()
-                + ", Overdraft Facility: "
+                + ", Overdraft Facility: $"
                 + getOverdraftFacility();
 
     }

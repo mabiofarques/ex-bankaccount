@@ -14,8 +14,9 @@ public class Program {
         System.out.println(account);
 
         try {
-            account.withdraw(570);
+            account.payBill(510);
             System.out.println(account.getBalance());
+
         }
         catch(BusinessException e){
             throw new BusinessException("Error: " + e.getMessage());
