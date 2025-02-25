@@ -17,14 +17,6 @@ public class BankAccount {
         calculateOverdraftFacility();
     }
 
-    public BankAccount(String holder, String numberAccount, double balance, double overdraftFacility) {
-        this.holder = holder;
-        this.numberAccount = numberAccount;
-        this.balance = balance;
-        this.overdraftFacility = overdraftFacility;
-        this.overdraftFacilityCalculated = true;
-    }
-
     public String getHolder() {
         return holder;
     }
@@ -55,27 +47,28 @@ public class BankAccount {
     }
 
     public void withdraw(double amount) throws BusinessException{
-        if(amount <= 0){
-            throw new BusinessException("Invalid withdraw");
-        }
-
-        double availableBalance = getBalance() + getOverdraftFacility();
-        if(amount <= availableBalance) {
-            if (amount > getBalance()) {
-                double overdraftUsed = amount - getBalance();
-                double overdraftFee = overdraftUsed * 0.2;
-                balance = - overdraftUsed - overdraftFee ;
-                System.out.println("You are in overdraft funds. Overdraft applied: " + overdraftFee);
-            }
-            else {
-                balance -= amount;
-            }
+        validadeWithdraw(amount);
+        if (amount > getBalance()) {
+            double overdraftUsed = amount - getBalance();
+            double overdraftFee = overdraftUsed * 0.2;
+            balance = - overdraftUsed - overdraftFee ;
+            System.out.println("You are in overdraft funds. Overdraft applied: 20% of $" + overdraftUsed);
         }
         else {
-            throw new BusinessException("This amount is not available, even with overdraft facility.");
+            balance -= amount;
         }
     }
 
+    private void validadeWithdraw(double amount) throws BusinessException{
+        if(amount <= 0){
+            throw new BusinessException("Invalid withdraw");
+        }
+        double availableBalance = getBalance() + getOverdraftFacility();
+        if(amount > availableBalance) {
+            throw new BusinessException("This amount is not available, even with overdraft facility.");
+        }
+
+    }
 
     public void calculateOverdraftFacility(){
         if (!overdraftFacilityCalculated) {

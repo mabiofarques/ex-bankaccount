@@ -14,11 +14,11 @@ public class Program {
         System.out.println(account);
 
         try {
-            account.withdraw(510);
+            account.withdraw(570);
             System.out.println(account.getBalance());
         }
         catch(BusinessException e){
-            throw new BusinessException(e.getMessage());
+            throw new BusinessException("Error: " + e.getMessage());
         }
     }
 }
